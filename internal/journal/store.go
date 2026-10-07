@@ -51,9 +51,12 @@ func (s *Store) Events(limit int) ([]model.Event, error) {
 		if json.Unmarshal(scanner.Bytes(), &event) == nil {
 			result = append(result, event)
 		}
-		if limit > 0 && len(result) >= limit {
-			break
-		}
 	}
-	return result, scanner.Err()
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+	if limit > 0 && len(result) > limit {
+		result = result[len(result)-limit:]
+	}
+	return result, nil
 }
