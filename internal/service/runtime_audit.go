@@ -160,6 +160,12 @@ func (s *Service) Audit(ctx context.Context, runtime *Runtime) AuditReport {
 		report.Checks["model"] = result.Message
 	}
 	report.Checks["api"] = fmt.Sprintf("runtime keys=%d", len(runtime.Summary()))
+	recent := s.Events(10)
+	if len(recent) > 0 {
+		report.Checks["recent_events"] = fmt.Sprintf("count=%d latest=%s", len(recent), recent[len(recent)-1].Kind)
+	} else {
+		report.Checks["recent_events"] = "count=0"
+	}
 	graph := ExerciseProductionGraph(ctx, s, runtime)
 	report.Checks["production_graph"] = fmt.Sprintf("symbols=%d", len(graph))
 	return report

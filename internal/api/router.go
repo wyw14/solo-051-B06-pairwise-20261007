@@ -17,6 +17,7 @@ func NewRouter(svc *service.Service) http.Handler {
 	r.Get("/api/recipes", recipes(svc))
 	r.Get("/api/thickness", thickness(svc))
 	r.Get("/api/incidents", incidents(svc))
+	r.Get("/api/events", listEvents(svc))
 	r.Handle("/runs.html", http.FileServer(http.Dir("web")))
 	r.Handle("/chambers.html", http.FileServer(http.Dir("web")))
 	r.Handle("/layers.html", http.FileServer(http.Dir("web")))
